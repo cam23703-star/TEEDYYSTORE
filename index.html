@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TEEDYY STORE | Shop ACC Free Fire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #0a0a0f; color: #e8edf2; overflow-x: hidden; }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --border: #2a2a3e;
+            --accent: #9b59b6;
+            --accent-light: #af7ac5;
+            --accent-glow: #8e44ad;
+            --text: #e8edf2;
+            --text-muted: #9ca3af;
+            --success: #00b894;
+            --error: #d63031;
+            --warning: #f39c12;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(155,89,182,0.4); } 50% { box-shadow: 0 0 0 15px rgba(155,89,182,0); } }
+        @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 100% { box-shadow: 0 0 20px var(--accent); } }
+
+        /* Toast Notification */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--bg-card); border-radius: 50px; padding: 12px 20px; display: flex; align-items: center; gap: 10px; z-index: 3000; animation: slideInUp 0.3s ease; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-size: 14px; }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--error); }
+        .toast.warning { border-left-color: var(--warning); }
+        @keyframes slideInUp { from { opacity: 0; transform: translateX(-50%) translateY(30px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+        .top-banner-left { position: fixed; top: 20px; left: 20px; z-index: 1000; background: rgba(26,26,46,0.95); backdrop-filter: blur(8px); border-radius: 14px; padding: 5px 12px; border: 1px solid var(--accent); box-shadow: 0 0 12px rgba(155,89,182,0.3); transition: all 0.3s ease; animation: slideInLeft 0.5s ease; }
+        .top-banner-left:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(155,89,182,0.5); }
+        .top-banner-left img { height: 42px; width: auto; border-radius: 8px; }
+
+        .user-avatar-fixed { position: fixed; top: 20px; right: 20px; z-index: 1001; cursor: pointer; animation: slideInRight 0.5s ease; }
+        .user-avatar-fixed img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent); background: #1e293b; object-fit: cover; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 8px rgba(155,89,182,0.5); }
+        .user-avatar-fixed img:hover { transform: scale(1.08) rotate(3deg); border-color: var(--accent-light); }
+
+        .user-menu { position: fixed; top: 75px; right: 20px; background: var(--bg-card); border-radius: 18px; border: 1px solid var(--border); z-index: 1002; width: 280px; display: none; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: fadeInScale 0.2s ease; max-height: 85vh; overflow-y: auto; }
+        .user-menu.show { display: block; }
+        .menu-item { padding: 12px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .menu-item:hover { background: rgba(155,89,182,0.2); transform: translateX(5px); }
+        .menu-item i { width: 22px; color: var(--accent); }
+        .balance-info { background: linear-gradient(135deg, rgba(155,89,182,0.2), rgba(0,0,0,0.3)); padding: 10px 18px; text-align: center; border-bottom: 1px solid var(--border); }
+        .balance-amount { font-size: 22px; font-weight: 800; color: var(--accent); }
+
+        .message-btn { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: linear-gradient(135deg, var(--accent), var(--accent-glow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulse 2s infinite; }
+        .message-btn:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 8px 25px rgba(155,89,182,0.6); }
+        .message-btn i { font-size: 24px; color: white; }
+        .unread-badge { position: absolute; top: -5px; right: -5px; background: var(--error); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-secondary); border-radius: 24px; width: 90%; max-width: 500px; padding: 24px; border: 1px solid var(--border); position: relative; max-height: 85vh; overflow-y: auto; animation: fadeInScale 0.3s ease; }
+        .close-modal { position: absolute; top: 14px; right: 18px; font-size: 24px; cursor: pointer; transition: 0.2s; color: var(--text-muted); }
+        .close-modal:hover { transform: rotate(90deg) scale(1.1); color: var(--accent); }
+
+        .history-item { background: var(--bg-card); border-radius: 14px; padding: 12px; margin-bottom: 10px; border-left: 3px solid var(--accent); transition: all 0.3s ease; cursor: pointer; }
+        .history-item:hover { transform: translateX(5px) scale(1.01); background: rgba(155,89,182,0.1); }
+
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; margin-bottom: 6px; font-size: 12px; color: var(--text-muted); }
+        .input-group input, .input-group textarea { width: 100%; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; color: white; font-size: 14px; transition: all 0.2s ease; }
+        .input-group input:focus { border-color: var(--accent); transform: scale(1.01); box-shadow: 0 0 8px rgba(155,89,182,0.3); outline: none; }
+
+        .btn-auth { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-glow)); border: none; border-radius: 40px; font-weight: 700; color: white; cursor: pointer; transition: all 0.3s ease; font-size: 14px; }
+        .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(155,89,182,0.4); }
+
+        .product-card { animation: fadeInUp 0.5s ease; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: var(--bg-card); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+        .product-card:hover { transform: translateY(-6px) scale(1.01); border-color: var(--accent); box-shadow: 0 12px 28px rgba(155,89,182,0.2); }
+        .product-img { width: 100%; height: 190px; object-fit: cover; transition: transform 0.5s ease; }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        .product-info { padding: 14px; }
+        .product-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+        .product-price { color: var(--accent); font-weight: 800; font-size: 20px; }
+        .buy-btn { background: linear-gradient(135deg, var(--accent), var(--accent-glow)); border: none; color: white; padding: 8px; width: 100%; border-radius: 40px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; font-size: 13px; }
+
+        /* Header thu gọn */
+        .shop-info-header { background: var(--bg-secondary); padding: 12px 5% 10px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); animation: fadeInUp 0.5s ease; font-size: 13px; }
+        .shop-name { font-weight: 600; letter-spacing: 0.5px; }
+        .shop-name i { color: var(--accent); margin-right: 6px; }
+        .support-info i { margin-right: 6px; color: var(--accent); }
+        .support-info span { background: var(--accent); padding: 3px 10px; border-radius: 30px; margin-left: 10px; font-size: 11px; font-weight: 600; }
+
+        .categories-tab { background: var(--bg-secondary); padding: 0 5%; border-bottom: 1px solid var(--border); display: flex; gap: 25px; overflow-x: auto; animation: fadeInUp 0.6s ease; }
+        .cat-tab { padding: 12px 0 10px; font-weight: 600; font-size: 15px; cursor: pointer; border-bottom: 3px solid transparent; color: var(--text-muted); transition: all 0.3s ease; white-space: nowrap; }
+        .cat-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .cat-tab:hover { color: var(--accent-light); transform: translateY(-2px); }
+
+        .products-container { padding: 25px 5% 20px; min-height: 55vh; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; }
+
+        .footer-enhanced { background: var(--bg-secondary); padding: 30px 5% 20px; margin-top: 40px; border-top: 1px solid var(--border); animation: fadeInUp 0.7s ease; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; }
+        .footer-col h4 { color: var(--accent); margin-bottom: 12px; font-size: 14px; }
+        .footer-col p { font-size: 12px; opacity: 0.8; }
+        .copyright { text-align: center; padding-top: 20px; border-top: 1px solid var(--border); margin-top: 20px; font-size: 11px; }
+
+        @media (max-width: 700px) {
+            .top-banner-left { top: 8px; left: 8px; padding: 3px 8px; }
+            .top-banner-left img { height: 32px; }
+            .user-avatar-fixed { top: 8px; right: 8px; }
+            .user-avatar-fixed img { width: 40px; height: 40px; }
+            .shop-info-header { padding-top: 55px; flex-direction: column; gap: 5px; text-align: center; font-size: 11px; }
+            .message-btn { bottom: 20px; right: 20px; width: 48px; height: 48px; }
+            .user-menu { width: 260px; right: 10px; top: 60px; }
+            .toast { width: 90%; font-size: 12px; padding: 10px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-banner-left"><img src="https://bannick.s3.hcm-1.cloud.cmctelecom.vn/photos/shares/01_logo_game/shopaccfreefire/logo-shop-acc-free-fire-tet.png" alt="Logo"></div>
+<div class="user-avatar-fixed" id="userAvatarFixed"><img id="avatarMain" src="https://shopbaanh.vn/images/avatar/av-1.svg" alt="avatar"></div>
+
+<div class="message-btn" id="messageBtn">
+    <i class="fas fa-comment-dots"></i>
+    <span class="unread-badge" id="unreadBadge" style="display:none;">0</span>
+</div>
+
+<div class="user-menu" id="userMenu">
+    <div class="balance-info"><div>Số dư của bạn</div><div class="balance-amount" id="balanceDisplay">0₫</div></div>
+    <div class="menu-item" id="menuHistory"><i class="fas fa-history"></i> Lịch sử mua hàng</div>
+    <div class="menu-item" id="menuRecharge"><i class="fas fa-money-bill-wave"></i> Nạp thẻ cào</div>
+    <div class="menu-item" id="menuLogin"><i class="fas fa-sign-in-alt"></i> Đăng nhập / Đăng ký</div>
+    <div class="menu-item" id="menuLogout" style="display:none;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</div>
+    <div class="menu-item" id="menuAdminPanel" style="display:none;"><i class="fas fa-crown"></i> Admin Panel</div>
+</div>
+
+<div id="historyModal" class="modal"><div class="modal-content" id="historyModalContent"></div></div>
+<div id="chatModal" class="modal"><div class="modal-content" style="max-width: 500px; padding: 0;" id="chatModalContent"></div></div>
+<div id="rechargeModal" class="modal"><div class="modal-content" id="rechargeModalContent"></div></div>
+<div id="authModal" class="modal"><div class="modal-content" id="authModalContent"></div></div>
+<div id="adminModal" class="modal"><div class="modal-content" id="adminModalContent" style="max-width: 750px;"></div></div>
+
+<!-- Header thu gọn -->
+<div class="shop-info-header">
+    <div class="shop-name"><i class="fas fa-store"></i> TEEDYY STORE - Shop Acc Free Fire Số 1</div>
+    <div class="support-info"><i class="fas fa-headset"></i> Hotline: 0373516403 <span>Zalo 24/7</span></div>
+</div>
+
+<div class="categories-tab">
+    <div class="cat-tab active" data-cat="vip"><i class="fas fa-crown"></i> ACC VIP</div>
+    <div class="cat-tab" data-cat="regular"><i class="fas fa-fire"></i> ACC Giá Rẻ</div>
+    <div class="cat-tab" data-cat="mystery"><i class="fas fa-gift"></i> Túi Mù FF</div>
+    <div class="cat-tab" data-cat="fakeLag"><i class="fas fa-tachometer-alt"></i> FAKE LAG</div>
+</div>
+
+<div class="products-container"><div class="product-grid" id="dynamicProductGrid"></div></div>
+
+<div class="footer-enhanced">
+    <div class="footer-grid">
+        <div class="footer-col"><h4>Shop mua bán</h4><p>Túi Mù, Acc Free Fire, Kim Cương<br><strong>uy tín – giá tốt</strong></p></div>
+        <div class="footer-col"><h4>Đồng hành cùng</h4><p style="font-size:18px; font-weight:800; background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">TEEDYY STORE</p><p>– cộng đồng game thủ Free Fire</p></div>
+        <div class="footer-col"><h4>Hệ thống giao dịch</h4><p><i class="fas fa-bolt"></i> tự động 24/7<br><i class="fas fa-envelope"></i> nhận tài khoản ngay</p></div>
+        <div class="footer-col"><h4>Thời gian hỗ trợ</h4><p>08:00 - 12:00 | 12:30 - 22:00</p></div>
+    </div>
+    <div class="copyright"p><p>© 2025 TEEDYYSTORE.Tất cả quyền được bảo lưu</p></div>
+</div>
+
+<script>
+    // ========== TOAST NOTIFICATION ==========
+    function showToast(message, type = 'info') {
+        const existingToast = document.querySelector('.toast');
+        if(existingToast) existingToast.remove();
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+        toast.innerHTML = `<i class="fas ${icon}" style="font-size: 16px;"></i><span>${message}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => { if(toast) toast.remove(); }, 4000);
+    }
+
+    // ========== DỮ LIỆU SẢN PHẨM ==========
+    const productsDB = {
+        vip: [
+            { name: "ACC VIP 6 - 7 ĐÁ - ĐỒ CỔ", price: 3290000, priceStr: "3.290.000đ", img: "https://shopbaanh.vn/uploads/05-02-2026/items/6/e0ec3929-6877-4ff8-81fd-9c7da392ba41.jpg" },
+            { name: "ACC VIP 8 - CHUYÊN NAM", price: 4549000, priceStr: "4.549.000đ", img: "https://shopbaanh.vn/uploads/24-02-2026/items/11/026f8b96-53a5-4227-895f-53c99747094b.jpg" }
+        ],
+        regular: [
+            { name: "ACC VIP 5 - 4 KHẨU NÂNG CẤP ", priceStr: 2350000, priceStr: "2.350.000đ", img: "https://shopbaanh.vn/uploads/09-03-2026/items/5/532d495e-888e-4f81-ac88-221a059ae2c7.jpg" },
+            { name: "ACC VIP 4 - 3 KHẨU NÂNG CẤP", priceStr: 749000, priceStr: "749.000đ", img: "https://shopbaanh.vn/uploads/09-03-2026/items/5/760cdc5d-99ab-4b84-ab7c-754dab742541.jpg" },
+            { name: "ACC VIP 5 - FULL THẺ VÔ CỰC", price: 1500000, priceStr: "1.590.000đ", img: "https://shopbaanh.vn/uploads/20-05-2026/items/4/285f91e8-cd35-4af5-bd5e-d7c106837fa8.jpg" }
+        ],
+        mystery: [
+            { name: "Túi Mù FF 149k", price: 149000, priceStr: "149.000đ", img: "https://cdn.taphoafifai.com/upload/component/844732739745337344.gif?v=", isMystery: true },
+            { name: "Túi Mù FF 199k", price: 199000, priceStr: "199.000đ", img: "https://cdn.taphoafifai.com/upload/component/844732700431912960.gif?v=", isMystery: true },
+            { name: "Túi Mù FF 299k", price: 299000, priceStr: "299.000đ", img: "https://cdn.taphoafifai.com/upload/component/844732648241356800.gif?v=", isMystery: true }
+        ],
+        fakeLag: [
+            { name: "HOPPER PREMIUM", price: 19000, priceStr: "19.000đ", img: "https://cdn.zermango.com/downloads/zermango/hoper-1778805394970.webp" },
+            { name: "FAKE LAG ITACHI PREMIUM", price: 99000, priceStr: "99.000đ", img: "https://cdn.zermango.com/downloads/zermango/z7830366095687_c10325fac888c10eb8eea506f3a983b0-1778862752497.webp" },
+            { name: "FAKE LAG ITACHI VIP PRO", price: 19000, priceStr: "19.000đ", img: "https://cdn.zermango.com/downloads/zermango/z7830257749528_c09642683aceac53ce379cdce4f6b89f-1778860057357.webp" },
+            { name: "FAKE LAG NET PLUS VIP", price: 29000, priceStr: "29.000đ", img: "https://cdn.zermango.com/downloads/zermango/img_0888-1778839576993.webp" },
+            { name: "Acc Lv5 Google", price: 5000, priceStr: "5.000đ", img: "https://cdn.zermango.com/downloads/zermango/img_0890-1778839545843.webp" },
+            { name: "Rank Kim Cương Tử Chiến", price: 25000, priceStr: "25.000đ", img: "https://cdn.zermango.com/downloads/zermango/z7828362482473_e154df4e57fd9048f2c33d07a7b659bb-1778860693657.webp" }
+        ]
+    };
+
+    // ========== HỆ THỐNG LƯU TRỮ ==========
+    let users = JSON.parse(localStorage.getItem('teedyy_users') || '[]');
+    let currentUser = JSON.parse(sessionStorage.getItem('teedyy_currentUser') || 'null');
+    let messages = JSON.parse(localStorage.getItem('teedyy_messages') || '[]');
+    let pendingRecharges = JSON.parse(localStorage.getItem('teedyy_pendingRecharges') || '[]');
+    let purchaseHistory = JSON.parse(localStorage.getItem('teedyy_purchaseHistory') || '[]');
+    const ADMIN_USERNAME = 'ngvanducthinh';
+    const ADMIN_PASSWORD = '21062013???';
+
+    // Tạo tài khoản demo
+    if(!users.find(u => u.username === 'nicewomen99@gmail.com')) {
+        users.push({ username: 'nicewomen99@gmail.com', password: 'notabadboy1', balance: 1500000, isAdmin: false, createdAt: new Date().toISOString(), phone: '0393399533', email: 'nicewomen99@gmail.com' });
+    }
+    const demoHistory = purchaseHistory.filter(h => h.username === 'nicewomen99@gmail.com');
+    if(demoHistory.length === 0) {
+        purchaseHistory.push({ id: 'FF' + Math.floor(Math.random()*10000000).toString().padStart(7, '0'), username: 'nicewomen99@gmail.com', productName: 'ACC Siêu Cấp - 2000$', price: 1290000, priceStr: '1.290.000đ', time: new Date(Date.now() - 7*24*60*60*1000).toISOString() });
+        purchaseHistory.push({ id: 'FF' + Math.floor(Math.random()*10000000).toString().padStart(7, '0'), username: 'nicewomen99@gmail.com', productName: 'Túi Mù FF 199k', price: 199000, priceStr: '199.000đ', time: new Date(Date.now() - 3*24*60*60*1000).toISOString() });
+        purchaseHistory.push({ id: 'FF' + Math.floor(Math.random()*10000000).toString().padStart(7, '0'), username: 'nicewomen99@gmail.com', productName: 'ACC Kim Cương 200k', price: 549000, priceStr: '549.000đ', time: new Date(Date.now() - 1*24*60*60*1000).toISOString() });
+    }
+
+    if(users.length === 0 || !users.find(u => u.username === ADMIN_USERNAME)) {
+        users.push({ username: ADMIN_USERNAME, password: ADMIN_PASSWORD, balance: 0, isAdmin: true, createdAt: new Date().toISOString(), phone: '', email: '' });
+    }
+
+    function saveAllData() {
+        localStorage.setItem('teedyy_users', JSON.stringify(users));
+        localStorage.setItem('teedyy_messages', JSON.stringify(messages));
+        localStorage.setItem('teedyy_pendingRecharges', JSON.stringify(pendingRecharges));
+        localStorage.setItem('teedyy_purchaseHistory', JSON.stringify(purchaseHistory));
+        if(currentUser) sessionStorage.setItem('teedyy_currentUser', JSON.stringify(currentUser));
+        else sessionStorage.removeItem('teedyy_currentUser');
+    }
+
+    function generateOrderId() { return 'FF' + Math.floor(Math.random() * 10000000).toString().padStart(7, '0'); }
+
+    function updateBalanceUI() { 
+        const balanceElem = document.getElementById('balanceDisplay');
+        if(balanceElem) balanceElem.innerText = currentUser?.balance?.toLocaleString() + '₫' || '0₫';
+    }
+    function updateUnreadBadge() {
+        if(!currentUser) return;
+        const unread = messages.filter(m => m.to === currentUser.username && !m.read).length;
+        const badge = document.getElementById('unreadBadge');
+        if(unread > 0) { badge.style.display = 'flex'; badge.innerText = unread; }
+        else badge.style.display = 'none';
+    }
+
+    // ========== LỊCH SỬ MUA HÀNG ==========
+    function openHistoryModal() {
+        if(!currentUser) { showToast('Vui lòng đăng nhập để xem lịch sử mua hàng!', 'error'); openLoginModal(); return; }
+        const modal = document.getElementById('historyModal');
+        const content = document.getElementById('historyModalContent');
+        const userHistory = purchaseHistory.filter(h => h.username === currentUser.username).sort((a,b) => new Date(b.time) - new Date(a.time));
+        content.innerHTML = `
+            <span class="close-modal" onclick="document.getElementById('historyModal').style.display='none'">&times;</span>
+            <h2 style="font-size:20px; margin-bottom:16px;"><i class="fas fa-history"></i> Lịch sử mua hàng</h2>
+            <p style="color: var(--text-muted); margin-bottom: 16px; font-size:13px;">Cảm ơn bạn đã ủng hộ TEEDYY!</p>
+            ${userHistory.length === 0 ? '<div style="text-align:center; padding:30px;"><i class="fas fa-shopping-bag fa-3x" style="color:var(--text-muted);"></i><p style="margin-top:12px;">Bạn chưa có đơn hàng nào</p></div>' : 
+            userHistory.map(item => `
+                <div class="history-item">
+                    <div style="font-family:monospace; font-size:11px; color:var(--accent); margin-bottom:4px;"><i class="fas fa-receipt"></i> ID: ${item.id}</div>
+                    <div style="font-weight:600; margin-bottom:2px;">📦 ${item.productName}</div>
+                    <div style="color:var(--accent); font-weight:700;">💰 ${item.priceStr}</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:4px;"><i class="far fa-clock"></i> ${new Date(item.time).toLocaleString('vi-VN')}</div>
+                </div>
+            `).join('')}
+            <div style="margin-top: 16px; padding: 10px; background: linear-gradient(135deg, rgba(155,89,182,0.1), rgba(0,0,0,0.2)); border-radius: 10px; text-align: center; font-size:12px;">
+                <i class="fas fa-heart" style="color: var(--accent);"></i> Cảm ơn bạn đã tin tưởng TEEDYY!
+            </div>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    // ========== RENDER SẢN PHẨM & MUA HÀNG ==========
+    function renderProducts(catKey) {
+        const container = document.getElementById('dynamicProductGrid');
+        const products = productsDB[catKey];
+        if(!products) return;
+        container.innerHTML = products.map((p, idx) => `
+            <div class="product-card" style="animation-delay: ${idx * 0.05}s">
+                <img class="product-img" src="${p.img}" onerror="this.src='https://placehold.co/300x200?text=No+Image'">
+                <div class="product-info">
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-price">${p.priceStr}</div>
+                    <button class="buy-btn" onclick="buyProduct('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.priceStr.replace(/'/g, "\\'")}')">${p.isMystery ? 'MỞ TÚI MÙ' : 'MUA NGAY'}</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function buyProduct(name, price, priceStr) {
+        if(!currentUser) { showToast('❌ Vui lòng đăng nhập để mua hàng!', 'error'); openLoginModal(); return; }
+        if(currentUser.balance < price) { 
+            showToast(`❌ Số dư không đủ! Cần: ${price.toLocaleString()}đ - Khả dụng: ${currentUser.balance.toLocaleString()}đ`, 'error'); 
+            openRechargeModal(); 
+            return; 
+        }
+        
+        currentUser.balance -= price;
+        const index = users.findIndex(u => u.username === currentUser.username);
+        if(index !== -1) users[index].balance = currentUser.balance;
+        
+        const orderId = generateOrderId();
+        purchaseHistory.push({
+            id: orderId,
+            username: currentUser.username,
+            productName: name,
+            price: price,
+            priceStr: priceStr,
+            time: new Date().toISOString()
+        });
+        
+        saveAllData();
+        updateBalanceUI();
+        
+        showToast(`✅ MUA HÀNG THÀNH CÔNG!\n🆔 ID: ${orderId}\n📋 Vào LỊCH SỬ MUA HÀNG để kiểm tra.\nCảm ơn bạn đã ủng hộ TEEDYY!`, 'success');
+    }
+
+    // ========== CHAT HỖ TRỢ ==========
+    function openChatModal() {
+        if(!currentUser) { showToast('Vui lòng đăng nhập để nhắn tin hỗ trợ!', 'error'); openLoginModal(); return; }
+        const modal = document.getElementById('chatModal');
+        const content = document.getElementById('chatModalContent');
+        renderChatInterface(content);
+        modal.style.display = 'flex';
+        messages.forEach(m => { if(m.to === currentUser.username && !m.read) m.read = true; });
+        saveAllData();
+        updateUnreadBadge();
+    }
+
+    function renderChatInterface(container) {
+        const userMessages = messages.filter(m => (m.from === currentUser.username && m.to === 'admin') || (m.from === 'admin' && m.to === currentUser.username));
+        container.innerHTML = `
+            <span class="close-modal" onclick="document.getElementById('chatModal').style.display='none'">&times;</span>
+            <h3 style="padding: 14px; border-bottom: 1px solid var(--border); font-size:16px;"><i class="fas fa-headset"></i> Hỗ trợ khách hàng</h3>
+            <div style="display:flex; flex-direction:column; height:420px;">
+                <div id="chatMessages" style="flex:1; overflow-y:auto; padding:14px;">
+                    ${userMessages.map(m => `
+                        <div style="max-width:80%; margin-bottom:10px; padding:8px 12px; border-radius:16px; ${m.from === currentUser.username ? 'background:var(--accent); margin-left:auto;' : 'background:var(--bg-card); border:1px solid var(--border);'}">
+                            <div style="font-size:10px; opacity:0.7;">${m.from === currentUser.username ? 'Bạn' : 'TEEDYY Support'}</div>
+                            <div style="font-size:13px;">${escapeHtml(m.content)}</div>
+                            <div style="font-size:9px; opacity:0.5; text-align:right;">${new Date(m.time).toLocaleTimeString()}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="display:flex; gap:10px; padding:12px; border-top:1px solid var(--border);">
+                    <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." style="flex:1; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:30px; color:white; font-size:13px;">
+                    <button id="sendChatBtn" style="background:var(--accent); border:none; padding:10px 20px; border-radius:30px; color:white; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        `;
+        const chatMessages = document.getElementById('chatMessages');
+        if(chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+        document.getElementById('sendChatBtn')?.addEventListener('click', () => {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(!text) { showToast('Vui lòng nhập nội dung tin nhắn!', 'warning'); return; }
+            messages.push({ from: currentUser.username, to: 'admin', content: text, time: new Date().toISOString(), read: false });
+            saveAllData();
+            renderChatInterface(container);
+            if(document.getElementById('adminModal')?.style.display === 'flex') renderAdminPanel();
+            updateUnreadBadge();
+            showToast('📨 Tin nhắn đã được gửi! Admin sẽ phản hồi sớm.', 'success');
+        });
+    }
+
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
+
+    // ========== MODAL NẠP THẺ (CHỈ CÒN NẠP THẺ CÀO, ĐÃ XÓA NGÂN HÀNG) ==========
+    let selectedProvider = 'VIETTEL', selectedValue = 10000;
+    function openRechargeModal() {
+        if(!currentUser) { showToast('Vui lòng đăng nhập để nạp thẻ!', 'error'); openLoginModal(); return; }
+        const modal = document.getElementById('rechargeModal');
+        const content = document.getElementById('rechargeModalContent');
+        content.innerHTML = `<span class="close-modal" onclick="document.getElementById('rechargeModal').style.display='none'">&times;</span>
+            <h2 style="font-size:20px; margin-bottom:16px;"><i class="fas fa-money-bill-wave"></i> Nạp thẻ cào</h2>
+            <div class="input-group"><label>Nhà mạng</label><div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:5px;">${['VIETTEL','VINAPHONE','MOBIFONE','ZING','GARENA'].map(p => `<div class="provider-item ${p===selectedProvider?'selected':''}" data-provider="${p}" style="background:var(--bg-card); padding:8px 16px; border-radius:30px; cursor:pointer; border:1px solid var(--border); transition:0.2s; font-size:13px;">${p}</div>`).join('')}</div></div>
+            <div class="input-group"><label>Serial thẻ cào</label><input type="text" id="serialInput" placeholder="Nhập serial thẻ"></div>
+            <div class="input-group"><label>Mã thẻ cào</label><input type="text" id="codeInput" placeholder="Nhập mã thẻ"></div>
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Mỗi seri chỉ được phép tồn tại 1 lần trên hệ thống</div>
+            <div class="input-group"><label>Mệnh giá</label><div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:5px;">${[10000,20000,30000,50000,100000,200000,300000,500000,1000000].map(v => `<div class="card-value ${v===selectedValue?'selected':''}" data-value="${v}" style="background:var(--bg-card); border:1px solid var(--border); border-radius:30px; padding:10px; text-align:center; cursor:pointer; transition:0.2s; font-size:13px;">${v.toLocaleString()}₫</div>`).join('')}</div></div>
+            <div style="font-size:11px; color:#ff8888; margin:12px 0;">Nạp thẻ tỉ lệ 100% - Nạp 100k nhận 100k</div>
+            <div style="display:flex; gap:12px;"><button class="btn-auth" id="closeRechargeBtn" style="background:var(--border);">Đóng</button><button class="btn-auth" id="submitRechargeBtn">Nạp thẻ</button></div>`;
+        document.querySelectorAll('.provider-item').forEach(el => el.addEventListener('click', function() { selectedProvider = this.dataset.provider; document.querySelectorAll('.provider-item').forEach(p=>p.classList.remove('selected')); this.classList.add('selected'); }));
+        document.querySelectorAll('.card-value').forEach(el => el.addEventListener('click', function() { selectedValue = parseInt(this.dataset.value); document.querySelectorAll('.card-value').forEach(v=>v.classList.remove('selected')); this.classList.add('selected'); }));
+        document.getElementById('closeRechargeBtn')?.addEventListener('click', () => modal.style.display='none');
+        document.getElementById('submitRechargeBtn')?.addEventListener('click', () => {
+            const serial = document.getElementById('serialInput')?.value.trim();
+            const code = document.getElementById('codeInput')?.value.trim();
+            if(!serial || !code) { showToast('Vui lòng nhập đầy đủ serial và mã thẻ!', 'error'); return; }
+            pendingRecharges.push({ username: currentUser.username, serial, code, provider: selectedProvider, value: selectedValue, status: 'pending', time: new Date().toISOString() });
+            saveAllData();
+            showToast(`✅ Đã gửi yêu cầu nạp ${selectedValue.toLocaleString()}đ! Chờ admin duyệt.`, 'success');
+            modal.style.display='none';
+        });
+        modal.style.display = 'flex';
+    }
+
+    // ========== LOGIN/REGISTER ==========
+    function openLoginModal() { renderLoginForm(); document.getElementById('authModal').style.display = 'flex'; }
+    function renderLoginForm() {
+        const content = document.getElementById('authModalContent');
+        content.innerHTML = `<span class="close-modal" onclick="document.getElementById('authModal').style.display='none'">&times;</span><h2 style="font-size:20px;"># Đăng nhập</h2><div class="modal-sub" style="color:var(--text-muted); margin-bottom:16px;">Chào mừng bạn trở lại </div><div class="error-msg" id="errorMsg" style="display:none; color:#ff8888; margin-bottom:12px; padding:8px; background:rgba(214,48,49,0.1); border-radius:10px; font-size:12px;"></div><div class="input-group"><label>Tên đăng nhập / Email</label><input type="text" id="loginUsername" placeholder="Nhập tên đăng nhập hoặc email"></div><div class="input-group"><label>Mật khẩu</label><input type="password" id="loginPassword" placeholder="Mật khẩu"></div><button class="btn-auth" id="submitLoginBtn">Đăng nhập →</button><div style="display:flex; align-items:center; gap:12px; margin:16px 0;"><div style="flex:1; height:1px; background:var(--border);"></div><span style="color:var(--text-muted); font-size:12px;">hoặc</span><div style="flex:1; height:1px; background:var(--border);"></div></div><div class="switch-mode" id="switchToRegister" style="text-align:center; cursor:pointer; font-size:13px;">Chưa có tài khoản? <span style="color:var(--accent);">Đăng ký ngay</span></div>`;
+        document.getElementById('submitLoginBtn')?.addEventListener('click', handleLogin);
+        document.getElementById('switchToRegister')?.addEventListener('click', renderRegisterForm);
+    }
+    function renderRegisterForm() {
+        const content = document.getElementById('authModalContent');
+        content.innerHTML = `<span class="close-modal" onclick="document.getElementById('authModal').style.display='none'">&times;</span><h2 style="font-size:20px;">Tạo tài khoản</h2><div class="modal-sub" style="color:var(--text-muted); margin-bottom:16px;">Tham gia TEEDYY ngay hôm nay</div><div class="error-msg" id="errorMsg" style="display:none; color:#ff8888; margin-bottom:12px; padding:8px; background:rgba(214,48,49,0.1); border-radius:10px; font-size:12px;"></div><div class="input-group"><label>Tên đăng nhập / Email</label><input type="text" id="regUsername" placeholder="username hoặc email"></div><div class="input-group"><label>Số điện thoại</label><input type="tel" id="regPhone" placeholder="Số điện thoại (không bắt buộc)"></div><div class="input-group"><label>Mật khẩu</label><input type="password" id="regPassword" placeholder="Mật khẩu"></div><div class="input-group"><label>Xác nhận mật khẩu</label><input type="password" id="regConfirmPassword" placeholder="Xác nhận"></div><button class="btn-auth" id="submitRegisterBtn">Đăng ký</button><div class="switch-mode" id="switchToLogin" style="text-align:center; margin-top:16px; cursor:pointer; font-size:13px;">Đã có tài khoản? <span style="color:var(--accent);">Đăng nhập</span></div>`;
+        document.getElementById('submitRegisterBtn')?.addEventListener('click', handleRegister);
+        document.getElementById('switchToLogin')?.addEventListener('click', renderLoginForm);
+    }
+    function handleLogin() {
+        let username = document.getElementById('loginUsername')?.value.trim();
+        const password = document.getElementById('loginPassword')?.value;
+        if(!username || !password) { showToast('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!', 'error'); return; }
+        let user = users.find(u => u.username === username && u.password === password);
+        if(!user && username.includes('@')) user = users.find(u => u.email === username && u.password === password);
+        if(!user) { 
+            showToast('❌ Sai tên đăng nhập hoặc mật khẩu!', 'error');
+            return; 
+        }
+        currentUser = { ...user };
+        saveAllData();
+        document.getElementById('authModal').style.display='none';
+        updateUIAfterLogin();
+        showToast(`✅ Chào mừng ${user.username} đã quay trở lại TEEDYY!`, 'success');
+    }
+    function handleRegister() {
+        const username = document.getElementById('regUsername')?.value.trim();
+        const password = document.getElementById('regPassword')?.value;
+        const confirm = document.getElementById('regConfirmPassword')?.value;
+        if(!username || !password) { showToast('Vui lòng nhập đầy đủ thông tin!', 'error'); return; }
+        if(password !== confirm) { showToast('Mật khẩu xác nhận không khớp!', 'error'); return; }
+        if(users.find(u => u.username === username)) { showToast('Tên đăng nhập đã tồn tại!', 'error'); return; }
+        const phone = document.getElementById('regPhone')?.value || '';
+        users.push({ username, password, balance: 0, isAdmin: false, createdAt: new Date().toISOString(), phone, email: username });
+        saveAllData();
+        showToast('🎉 Đăng ký thành công! Vui lòng đăng nhập.', 'success');
+        renderLoginForm();
+    }
+    function logout() { 
+        currentUser = null; 
+        saveAllData(); 
+        updateUIAfterLogin(); 
+        showToast('🔓 Đã đăng xuất khỏi TEEDYY!', 'info');
+    }
+    function updateUIAfterLogin() {
+        updateBalanceUI(); updateUnreadBadge();
+        const avatar = document.getElementById('avatarMain');
+        if(currentUser) avatar.src = "https://shinmod.net/favicon.jpg";
+        else avatar.src = "https://shopbaanh.vn/images/avatar/av-1.svg";
+        avatar.onerror = () => { if(currentUser) avatar.src = "https://placehold.co/200x200?text=User"; };
+        const menuLogin = document.getElementById('menuLogin'), menuLogout = document.getElementById('menuLogout'), menuAdmin = document.getElementById('menuAdminPanel');
+        if(currentUser) { menuLogin.style.display = 'none'; menuLogout.style.display = 'flex'; menuAdmin.style.display = currentUser.isAdmin ? 'flex' : 'none'; }
+        else { menuLogin.style.display = 'flex'; menuLogout.style.display = 'none'; menuAdmin.style.display = 'none'; }
+    }
+
+    // ========== ADMIN PANEL ==========
+    function openAdminPanel() {
+        if(!currentUser?.isAdmin) { showToast('Bạn không có quyền truy cập Admin Panel!', 'error'); return; }
+        renderAdminPanel();
+        document.getElementById('adminModal').style.display = 'flex';
+    }
+    function renderAdminPanel() {
+        const content = document.getElementById('adminModalContent');
+        const conversations = {};
+        messages.forEach(m => { const other = m.from === 'admin' ? m.to : m.from; if(!conversations[other]) conversations[other] = []; conversations[other].push(m); });
+        content.innerHTML = `<span class="close-modal" onclick="document.getElementById('adminModal').style.display='none'">&times;</span>
+            <h2 style="font-size:20px; margin-bottom:16px;"><i class="fas fa-crown"></i> Admin Panel</h2>
+            <div style="display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); flex-wrap:wrap;">
+                <div class="admin-tab active" data-tab="users" style="padding:8px 16px; cursor:pointer; transition:0.2s; font-size:13px;">👥 Người dùng (${users.length})</div>
+                <div class="admin-tab" data-tab="pending" style="padding:8px 16px; cursor:pointer; transition:0.2s; font-size:13px;">💳 Duyệt nạp (${pendingRecharges.length})</div>
+                <div class="admin-tab" data-tab="messages" style="padding:8px 16px; cursor:pointer; transition:0.2s; font-size:13px;">💬 Tin nhắn (${Object.keys(conversations).length})</div>
+                <div class="admin-tab" data-tab="history" style="padding:8px 16px; cursor:pointer; transition:0.2s; font-size:13px;">📜 Lịch sử mua (${purchaseHistory.length})</div>
+            </div>
+            <div id="adminTabUsers"><div style="max-height:400px; overflow-y:auto">${users.map(u => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border); font-size:13px;"><span><strong>${u.username}</strong> ${u.isAdmin?'⭐Admin':''}<br>💰 ${(u.balance||0).toLocaleString()}đ</span><span>📅 ${new Date(u.createdAt).toLocaleDateString()}</span></div>`).join('')}</div></div>
+            <div id="adminTabPending" style="display:none"><div style="max-height:400px; overflow-y:auto">${pendingRecharges.length===0?'<div style="padding:30px;text-align:center">Không có yêu cầu</div>':pendingRecharges.map((req,idx)=>`<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border); font-size:13px;"><div><strong>${req.username}</strong><br>${req.value.toLocaleString()}đ - ${req.provider}<br><small>Serial: ${req.serial}</small></div><div><button onclick="approveRecharge(${idx})" style="background:var(--accent); border:none; padding:4px 10px; border-radius:20px; cursor:pointer; font-size:12px;">✅ Duyệt</button></div></div>`).join('')}</div></div>
+            <div id="adminTabMessages" style="display:none"><div style="max-height:400px; overflow-y:auto">${Object.keys(conversations).length===0?'<div style="padding:30px;text-align:center">Chưa có tin nhắn</div>':Object.entries(conversations).map(([user, msgs]) => `<div style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer; display:flex; justify-content:space-between; font-size:13px;" onclick="openChatWithUser('${user}')"><span><i class="fas fa-user"></i> ${user}</span><span>${msgs.filter(m=>!m.read && m.to==='admin').length>0?`<span style="background:var(--accent); border-radius:12px; padding:2px 8px; font-size:11px;">${msgs.filter(m=>!m.read && m.to==='admin').length}</span>`:''}</span></div>`).join('')}</div></div>
+            <div id="adminTabHistory" style="display:none"><div style="max-height:400px; overflow-y:auto">${purchaseHistory.length===0?'<div style="padding:30px;text-align:center">Chưa có giao dịch</div>':purchaseHistory.slice().reverse().map(h => `<div style="padding:8px; border-bottom:1px solid var(--border); font-size:12px;"><strong>${h.id}</strong> - ${h.productName}<br>👤 ${h.username} - ${h.priceStr}<br><small>${new Date(h.time).toLocaleString('vi-VN')}</small></div>`).join('')}</div></div>`;
+        document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', function() { document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); document.getElementById('adminTabUsers').style.display = this.dataset.tab==='users'?'block':'none'; document.getElementById('adminTabPending').style.display = this.dataset.tab==='pending'?'block':'none'; document.getElementById('adminTabMessages').style.display = this.dataset.tab==='messages'?'block':'none'; document.getElementById('adminTabHistory').style.display = this.dataset.tab==='history'?'block':'none'; }));
+    }
+    window.approveRecharge = (idx) => {
+        const req = pendingRecharges[idx];
+        if(req) {
+            const userIdx = users.findIndex(u => u.username === req.username);
+            if(userIdx !== -1) { users[userIdx].balance += req.value; if(currentUser?.username === req.username) { currentUser.balance = users[userIdx].balance; updateBalanceUI(); } }
+            pendingRecharges.splice(idx,1);
+            saveAllData();
+            showToast(`✅ Đã duyệt nạp ${req.value.toLocaleString()}đ cho ${req.username}`, 'success');
+            renderAdminPanel();
+        }
+    };
+    window.openChatWithUser = (username) => {
+        const content = document.getElementById('adminModalContent');
+        const convMessages = messages.filter(m => (m.from === username && m.to === 'admin') || (m.from === 'admin' && m.to === username));
+        messages.forEach(m => { if(m.from === username && m.to === 'admin' && !m.read) m.read = true; });
+        saveAllData();
+        content.innerHTML = `<span class="close-modal" onclick="document.getElementById('adminModal').style.display='none'">&times;</span>
+            <h3 style="font-size:16px; margin-bottom:12px;"><i class="fas fa-comment"></i> Chat với ${username}</h3>
+            <div style="height:400px; display:flex; flex-direction:column;">
+                <div id="adminChatMessages" style="flex:1; overflow-y:auto; padding:12px;">
+                    ${convMessages.map(m => `<div style="max-width:80%; margin-bottom:10px; padding:8px 12px; border-radius:16px; ${m.from === 'admin' ? 'background:var(--accent); margin-left:auto;' : 'background:var(--bg-card); border:1px solid var(--border);'}"><div style="font-size:10px; opacity:0.7;">${m.from === 'admin' ? 'Admin' : username}</div><div style="font-size:13px;">${escapeHtml(m.content)}</div><div style="font-size:9px; opacity:0.5; text-align:right;">${new Date(m.time).toLocaleTimeString()}</div></div>`).join('')}
+                </div>
+                <div style="display:flex; gap:10px; padding:12px; border-top:1px solid var(--border);">
+                    <input type="text" id="adminChatInput" placeholder="Nhập trả lời..." style="flex:1; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:30px; color:white; font-size:13px;">
+                    <button id="adminSendBtn" style="background:var(--accent); border:none; padding:10px 20px; border-radius:30px; color:white; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            <button class="btn-auth" style="margin-top:12px; padding:10px;" onclick="renderAdminPanel()">⬅ Quay lại</button>`;
+        const chatMsgs = document.getElementById('adminChatMessages');
+        if(chatMsgs) chatMsgs.scrollTop = chatMsgs.scrollHeight;
+        document.getElementById('adminSendBtn')?.addEventListener('click', () => {
+            const input = document.getElementById('adminChatInput');
+            const text = input.value.trim();
+            if(!text) { showToast('Vui lòng nhập nội dung trả lời!', 'warning'); return; }
+            messages.push({ from: 'admin', to: username, content: text, time: new Date().toISOString(), read: false });
+            saveAllData();
+            window.openChatWithUser(username);
+            updateUnreadBadge();
+            showToast(`📨 Đã gửi tin nhắn tới ${username}`, 'success');
+        });
+    };
+
+    // ========== KHỞI TẠO & EVENT ==========
+    document.getElementById('userAvatarFixed').addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('show'); });
+    document.addEventListener('click', () => document.getElementById('userMenu').classList.remove('show'));
+    document.getElementById('menuHistory').addEventListener('click', () => { openHistoryModal(); document.getElementById('userMenu').classList.remove('show'); });
+    document.getElementById('menuRecharge').addEventListener('click', () => { if(!currentUser) { showToast('Vui lòng đăng nhập để nạp thẻ!', 'error'); openLoginModal(); } else openRechargeModal(); document.getElementById('userMenu').classList.remove('show'); });
+    document.getElementById('menuLogin').addEventListener('click', () => { openLoginModal(); document.getElementById('userMenu').classList.remove('show'); });
+    document.getElementById('menuLogout').addEventListener('click', () => { logout(); document.getElementById('userMenu').classList.remove('show'); });
+    document.getElementById('menuAdminPanel').addEventListener('click', () => { openAdminPanel(); document.getElementById('userMenu').classList.remove('show'); });
+    document.getElementById('messageBtn').addEventListener('click', () => openChatModal());
+
+    const tabs = document.querySelectorAll('.cat-tab');
+    function setActiveTab(cat) { tabs.forEach(t => t.classList.remove('active')); document.querySelector(`.cat-tab[data-cat="${cat}"]`).classList.add('active'); renderProducts(cat); }
+    tabs.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab.dataset.cat)));
+    setActiveTab('vip');
+    updateUIAfterLogin();
+    saveAllData();
+</script>
+</body>
+</html>
