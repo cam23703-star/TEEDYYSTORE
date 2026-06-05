@@ -203,6 +203,62 @@
             gap: 20px;
         }
 
+        /* --- NÚT BẬT TẮT SOUND NÂNG CẤP --- */
+        .sound-toggle-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--accent);
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sound-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .sound-toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .sound-toggle-btn:hover {
+            transform: scale(1.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+        }
+
+        .sound-toggle-btn.muted {
+            color: #e74c3c;
+            background: linear-gradient(145deg, #2c1a2e, #1a0f1a);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        .sound-toggle-btn i {
+            transition: transform 0.2s;
+        }
+        
+        .sound-toggle-btn:hover i {
+            transform: scale(1.1);
+        }
+        /* ---------------------------- */
+
         .hamburger-btn {
             background: linear-gradient(135deg, var(--accent), var(--accent-glow));
             width: 48px;
@@ -278,31 +334,30 @@
             object-fit: cover;
         }
 
-        /* Sidebar Menu - NÂNG CẤP SANG TRỌNG */
+        /* Sidebar Menu */
         .sidebar {
             position: fixed;
             top: 0;
-            left: -400px;
-            width: 360px;
+            left: -380px;
+            width: 340px;
             height: 100%;
-            background: linear-gradient(145deg, rgba(20, 20, 35, 0.98), rgba(10, 10, 20, 0.98));
-            backdrop-filter: blur(25px);
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+            backdrop-filter: blur(20px);
             z-index: 2000;
-            transition: left 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border-right: 1px solid rgba(155, 89, 182, 0.4);
-            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.6);
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--border);
+            box-shadow: 5px 0 40px rgba(0, 0, 0, 0.5);
             overflow-y: auto;
         }
 
         .sidebar.open { left: 0; }
 
         .sidebar-header {
-            padding: 25px 20px;
-            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(0, 184, 148, 0.1));
+            padding: 35px 25px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
             text-align: center;
             position: relative;
             overflow: hidden;
-            border-bottom: 1px solid var(--border);
         }
 
         .sidebar-header::before {
@@ -312,52 +367,41 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(155, 89, 182, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
             animation: float 8s ease-in-out infinite;
         }
 
-        .sidebar-header img {
-            width: 140px;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(155, 89, 182, 0.5);
-            border: 2px solid var(--accent);
+        .sidebar-header h2 {
+            color: white;
+            font-size: 26px;
+            font-weight: 800;
             position: relative;
-            transition: transform 0.3s;
         }
-        .sidebar-header img:hover {
-            transform: scale(1.02);
+
+        .sidebar-header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            margin-top: 8px;
+            position: relative;
         }
 
         .sidebar-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            top: 18px;
+            right: 18px;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.3s;
             z-index: 1;
-            backdrop-filter: blur(4px);
         }
 
-        .sidebar-close:hover {
-            background: var(--error);
-            transform: rotate(90deg);
-            box-shadow: 0 0 15px rgba(214, 48, 49, 0.5);
-        }
+        .sidebar-close:hover { transform: rotate(90deg); }
 
         /* User Info Section */
         .sidebar-user {
             padding: 25px;
-            background: rgba(155, 89, 182, 0.05);
+            background: rgba(155, 89, 182, 0.08);
             border-bottom: 1px solid var(--border);
             text-align: center;
         }
@@ -369,7 +413,6 @@
             margin: 0 auto 12px;
             border: 3px solid var(--accent);
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
         }
 
         .sidebar-user-avatar img {
@@ -389,7 +432,6 @@
             font-weight: 800;
             color: var(--success);
             margin-top: 8px;
-            text-shadow: 0 0 5px rgba(0,184,148,0.3);
         }
 
         .sidebar-login-btn, .sidebar-logout-btn {
@@ -441,35 +483,6 @@
             font-size: 18px;
             color: var(--accent);
         }
-        
-        /* Nút âm thanh trong Menu */
-        .sidebar-menu-item.sound-item {
-            border-bottom: 1px solid rgba(155, 89, 182, 0.2);
-            margin-top: 10px;
-        }
-        .sound-toggle-inmenu {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .sound-toggle-inmenu span {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .sound-toggle-inmenu i {
-            width: auto;
-            font-size: 20px;
-        }
-        .sound-status {
-            font-size: 12px;
-            background: rgba(0,0,0,0.5);
-            padding: 4px 12px;
-            border-radius: 30px;
-            color: var(--success);
-        }
-        .sound-status.muted { color: var(--error); }
 
         .sidebar-category-title {
             padding: 20px 25px 10px;
@@ -1603,7 +1616,7 @@
             .hero { padding: 40px 20px; }
             .categories-grid { grid-template-columns: 1fr; }
             .product-grid { grid-template-columns: 1fr; }
-            .sidebar { width: 300px; }
+            .sidebar { width: 280px; }
             .search-wrapper { width: 100%; }
             .section-header { flex-direction: column; align-items: flex-start; }
             .chat-modal { width: 340px; height: 500px; right: 10px; bottom: 100px; }
@@ -1635,9 +1648,10 @@
 </head>
 <body>
 
-<!-- Audio Element -->
+<!-- Audio Element: Tên video.mp3, tự động phát và lặp lại -->
 <audio id="bgAudio" loop preload="auto">
     <source src="video.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ phát nhạc nền.
 </audio>
 
 <div class="bg-animation"></div>
@@ -1671,7 +1685,8 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <img src="https://i.imgur.com/2BXrVkM.png" alt="TEEDYY Logo">
+        <h2><i class="fas fa-store"></i>Đ.THỊNH 💻📲</h2>
+        <p>Nếu bị bạn lỗi giao diện thì vui lòng chuyển sang trang dành cho máy tính ở chrome</p>
         <div class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></div>
     </div>
 
@@ -1686,14 +1701,6 @@
     </div>
 
     <div class="sidebar-menu-items">
-        <!-- Nút âm thanh trong menu -->
-        <div class="sidebar-menu-item sound-item" id="menuSoundToggle">
-            <div class="sound-toggle-inmenu">
-                <span><i class="fas fa-music"></i> Nhạc nền</span>
-                <span class="sound-status" id="menuSoundStatus">Đang bật</span>
-            </div>
-        </div>
-        
         <div class="sidebar-menu-item" id="sidebarTerms">
             <i class="fas fa-file-contract"></i>
             <span>Điều Khoản & Chính Sách</span>
@@ -1748,7 +1755,11 @@
         <div class="hamburger-btn" id="hamburgerBtn">
             <i class="fas fa-bars"></i>
         </div>
-        <img class="logo-banner" src="https://i.imgur.com/86FFerb.jpeg" alt="TEEDYY Banner">
+        <!-- NÚT BẬT TẮT SOUND NÂNG CẤP -->
+        <div class="sound-toggle-btn" id="soundToggleBtn" title="Bật/Tắt nhạc">
+            <i class="fas fa-music"></i>
+        </div>
+        <img class="logo-banner" src="https://i.imgur.com/Qptzhab.jpeg" alt="TEEDYY Banner">
     </div>
     <div class="avatar-btn" id="avatarBtn">
         <img id="avatarMain" src="https://i.imgur.com/FxIKxW4.jpeg" alt="avatar">
@@ -1792,7 +1803,7 @@
 <!-- Admin Chat Modal -->
 <div class="chat-modal" id="adminChatModal">
     <div class="chat-header">
-        <h3><i class="fas fa-headset"></i> Hỗ trợ khách hàng (Admin)</h3>
+        <h3><i class="fas fa-headset"></i> Hỗ trợ khách hàng</h3>
         <i class="fas fa-times" id="closeAdminChat"></i>
     </div>
     <div class="chat-users-list" id="chatUsersList"></div>
@@ -2030,34 +2041,28 @@
 <script>
     // ========== AUDIO CONTROL ==========
     const audio = document.getElementById('bgAudio');
-    const soundBtnInHeader = document.getElementById('soundToggleBtn'); // Không còn nữa nhưng giữ logic
-    const menuSoundItem = document.getElementById('menuSoundToggle');
-    const menuSoundStatus = document.getElementById('menuSoundStatus');
+    const soundBtn = document.getElementById('soundToggleBtn');
     let isPlaying = false;
 
-    function updateSoundUI() {
-        if (isPlaying) {
-            if(menuSoundStatus) menuSoundStatus.innerText = 'Đang bật';
-            if(menuSoundStatus) menuSoundStatus.style.color = 'var(--success)';
-        } else {
-            if(menuSoundStatus) menuSoundStatus.innerText = 'Đã tắt';
-            if(menuSoundStatus) menuSoundStatus.style.color = 'var(--error)';
-        }
-    }
-
+    // Hàm phát nhạc (kèm xử lý lỗi tự động phát của trình duyệt)
     function playAudio() {
         audio.play().then(() => {
             isPlaying = true;
-            updateSoundUI();
+            soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            soundBtn.classList.remove('muted');
         }).catch(error => {
-            console.log("Trình duyệt chặn tự động phát nhạc.");
+            console.log("Trình duyệt chặn tự động phát nhạc. Vui lòng click bất kỳ đâu trên web để bật nhạc.");
+            // Nếu bị chặn, vẫn để ở trạng thái tắt nhưng sẽ bật khi người dùng tương tác
             isPlaying = false;
-            updateSoundUI();
+            soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            soundBtn.classList.add('muted');
+            // Thêm sự kiện click toàn trang để bật nhạc lần đầu
             const enableAudioOnClick = () => {
                 if (!isPlaying) {
                     audio.play().then(() => {
                         isPlaying = true;
-                        updateSoundUI();
+                        soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        soundBtn.classList.remove('muted');
                     }).catch(e => console.log("Vẫn bị lỗi phát:", e));
                     document.removeEventListener('click', enableAudioOnClick);
                 }
@@ -2066,16 +2071,19 @@
         });
     }
 
+    // Bật/Tắt nhạc khi nhấn nút
     function toggleSound() {
         if (!audio) return;
         if (isPlaying) {
             audio.pause();
             isPlaying = false;
-            updateSoundUI();
+            soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            soundBtn.classList.add('muted');
         } else {
             audio.play().then(() => {
                 isPlaying = true;
-                updateSoundUI();
+                soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                soundBtn.classList.remove('muted');
             }).catch(err => {
                 console.log("Lỗi bật nhạc:", err);
                 showToast("Vui lòng tương tác với trang để bật nhạc!", "warning");
@@ -2083,15 +2091,16 @@
         }
     }
 
+    // Khởi tạo âm thanh: loop và cố gắng phát (sẽ bị trình duyệt chặn nếu chưa click)
     audio.loop = true;
+    // Thử phát ngay
     playAudio();
 
-    if(menuSoundItem) {
-        menuSoundItem.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleSound();
-        });
-    }
+    // Gán sự kiện cho nút
+    soundBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleSound();
+    });
     // =================================
 
     // ========== CREATE PARTICLES ==========
@@ -2932,7 +2941,7 @@
                                     <th style="padding:12px; text-align:left;">Mệnh giá</th>
                                     <th style="padding:12px; text-align:left;">Thời gian</th>
                                     <th style="padding:12px; text-align:left;">Thao tác</th>
-                                   </tr>
+                                  </tr>
                             </thead>
                             <tbody>
                                 ${pendingRecharges.map((r, idx) => `
@@ -2943,7 +2952,7 @@
                                         <td style="padding:12px;">${r.value.toLocaleString()}đ</td>
                                         <td style="padding:12px;"><small>${new Date(r.time).toLocaleString('vi-VN')}</small></td>
                                         <td style="padding:12px;"><button class="admin-btn" onclick="approveRecharge(${idx})">Duyệt</button></td>
-                                    </tr>
+                                      </tr>
                                 `).join('')}
                             </tbody>
                         </table>
@@ -2960,7 +2969,7 @@
                                     <th style="padding:12px;">Số dư</th>
                                     <th style="padding:12px;">Ngày tạo</th>
                                     <th style="padding:12px;">Vai trò</th>
-                                </tr>
+                                  </tr>
                             </thead>
                             <tbody>
                                 ${users.map(u => `
@@ -2970,7 +2979,7 @@
                                         <td style="padding:12px; color:var(--success);">${(u.balance || 0).toLocaleString()}đ</td>
                                         <td style="padding:12px;"><small>${new Date(u.createdAt).toLocaleDateString('vi-VN')}</small></td>
                                         <td style="padding:12px;">${u.isAdmin ? 'Admin' : 'User'}</td>
-                                    </tr>
+                                      </tr>
                                 `).join('')}
                             </tbody>
                         </table>
@@ -2987,7 +2996,7 @@
                                     <th style="padding:12px;">Số lượng</th>
                                     <th style="padding:12px;">Tổng tiền</th>
                                     <th style="padding:12px;">Thời gian</th>
-                                </tr>
+                                  </tr>
                             </thead>
                             <tbody>
                                 ${purchaseHistory.slice().reverse().map(o => `
@@ -2998,7 +3007,7 @@
                                         <td style="padding:12px;">${o.quantity || 1}</td>
                                         <td style="padding:12px; color:var(--accent);">${o.priceStr} đ</td>
                                         <td style="padding:12px;"><small>${new Date(o.time).toLocaleString('vi-VN')}</small></td>
-                                    </tr>
+                                      </tr>
                                 `).join('')}
                             </tbody>
                         </table>
